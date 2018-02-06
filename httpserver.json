@@ -1,0 +1,28 @@
+{
+   "builders": [
+      {
+         "api_token": "{{user `do_api_token`}}",
+         "image": "centos-7-x64",
+         "region": "ams3",
+         "size": "512mb",
+         "snapshot_name": "httpserver-{{timestamp}}",
+         "ssh_username": "root",
+         "type": "digitalocean"
+      }
+   ],
+   "provisioners": [
+      {
+         "script": "install_puppet_agent.sh",
+         "type": "shell"
+      },
+      {
+         "manifest_file": "httpd.pp",
+         "prevent_sudo": true,
+         "puppet_bin_dir": "/opt/puppetlabs/bin",
+         "type": "puppet-masterless"
+      }
+   ],
+   "variables": {
+      "do_api_token": "{{env `DIGITALOCEAN_TOKEN`}}"
+   }
+}
